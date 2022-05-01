@@ -18,7 +18,7 @@ services:
   
   backend:
     container_name: baraholka-backend
-    image: darkartheme/baraholka-backend:0.4.4
+    image: darkartheme/baraholka-backend:0.6.0
     restart: always
     networks:
       - baraholka-network
@@ -34,10 +34,9 @@ services:
 
   frontend:
     container_name: baraholka-frontend
-    image: darkartheme/baraholka-frontend:0.5.1
+    image: darkartheme/baraholka-frontend:0.6.0
     networks:
       - baraholka-network
-    # restart: always
     volumes:
       - react_build:/react/build
     depends_on:
@@ -52,28 +51,19 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      # - ./601345-darkartheme-tmweb-ru:/etc/nginx/sites-available/tmweb.ru
-      # - ./misis-marketplace-ru:/etc/nginx/sites-available/misis-marketplace.ru
-      - ./default.conf:/etc/nginx/conf.d/default.conf:ro
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./tm-web-fullchain.pem:/etc/letsencrypt/live/601345-darkartheme.tmweb.ru/fullchain.pem:ro
-      - ./tm-web-privkey.pem:/etc/letsencrypt/live/601345-darkartheme.tmweb.ru/privkey.pem:ro
-      - ./mm-fullchain.pem:/etc/letsencrypt/live/misis-marketplace.ru/fullchain.pem:ro
-      - ./mm-privkey.pem:/etc/letsencrypt/live/misis-marketplace.ru/privkey.pem:ro
-      - ./options-ssl-nginx.conf:/etc/letsencrypt/options-ssl-nginx.conf:ro
-      - ./ssl-dhparams.pem:/etc/letsencrypt/ssl-dhparams.pem:ro
-      - react_build:/var/www/react
-    # command: 
-    #   - mkdir /etc/nginx/sites-enabled
-    #   - ln -s /etc/nginx/sites-available/tmweb.ru /etc/nginx/sites-enabled/tmweb.ru
-    #   - ln -s /etc/nginx/sites-available/misis-marketplace.ru /etc/nginx/sites-enabled/misis-marketplace.ru
+      - ./misis-marketplace.ru.conf:/etc/nginx/conf.d/misis-marketplace.ru.conf:ro
+      - /etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - /etc/letsencrypt/live/misis-marketplace.ru/fullchain.pem:/etc/letsencrypt/live/misis-marketplace.ru/fullchain.pem:ro
+      - /etc/letsencrypt/live/misis-marketplace.ru/privkey.pem:/etc/letsencrypt/live/misis-marketplace.ru/privkey.pem:ro
+      - /etc/letsencrypt/live/misis-marketplace.ru/chain.pem:/etc/letsencrypt/live/misis-marketplace.ru/chain.pem:ro
+      - /etc/letsencrypt/live/misis-marketplace.ru/dhparam.pem:/etc/letsencrypt/live/misis-marketplace.ru/dhparam.pem:ro
+      - react_build:/var/www/misis-marketplace
     depends_on:
       - database
       - backend
       - frontend
     networks:
       - baraholka-network
-    # network_mode: host
 
 volumes:
   postgres_data:
